@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: toyota-gr-racing-simulator
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app_lightweight:server
+    plan: free
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
