@@ -12,14 +12,21 @@ Simulador optimizado con:
 Desarrollado para el concurso "Hack the Track" 2024
 """
 
-# CONFIGURAR H: DRIVE PARA TEMPORALES ANTES DE IMPORTAR
+# CONFIGURAR DIRECTORIOS TEMPORALES (compatible con Windows y Linux)
 import os
 import sys
 from pathlib import Path
+import tempfile
 
-# Configurar directorios temporales en H: drive
-TEMP_DIR = Path("H:/Toyota Project/temp")
-TEMP_DIR.mkdir(exist_ok=True)
+# Usar H: drive si existe (desarrollo local), sino usar temp local o sistema
+if Path("H:/Toyota Project").exists():
+    TEMP_DIR = Path("H:/Toyota Project/temp")
+else:
+    # Para producción (Render/Linux): usar temp en el directorio actual
+    TEMP_DIR = Path(__file__).parent / "temp"
+
+# Crear directorio si no existe
+TEMP_DIR.mkdir(parents=True, exist_ok=True)
 
 os.environ['TEMP'] = str(TEMP_DIR)
 os.environ['TMP'] = str(TEMP_DIR)
@@ -27,7 +34,7 @@ os.environ['TMPDIR'] = str(TEMP_DIR)
 os.environ['MPLCONFIGDIR'] = str(TEMP_DIR)
 os.environ['PYTHON_EGG_CACHE'] = str(TEMP_DIR)
 
-print(f"[CONFIG] Archivos temporales configurados en: {TEMP_DIR}")
+print(f"[CONFIG] Temp files configured at: {TEMP_DIR}")
 
 import dash
 from dash import dcc, html, Input, Output, State, callback_context, dash_table
